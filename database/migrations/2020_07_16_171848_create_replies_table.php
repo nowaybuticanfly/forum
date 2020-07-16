@@ -17,6 +17,7 @@ class CreateRepliesTable extends Migration
             $table->id();
             $table->bigInteger('user_id');
             $table->bigInteger('thread_id');
+            $table->text('body');
             $table->timestamps();
         });
     }
