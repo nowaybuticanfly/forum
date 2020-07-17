@@ -19,6 +19,13 @@ class ThreadTest extends TestCase
     }
 
 
+    public function test_it_has_an_owner()
+    {
+
+        $this->assertInstanceOf('App\User', $this->thread->creator);
+    }
+
+
     public function test_it_has_replies()
     {
 
@@ -27,12 +34,6 @@ class ThreadTest extends TestCase
 
     }
 
-
-    public function test_it_has_an_owner()
-    {
-
-        $this->assertInstanceOf('App\User', $this->thread->creator);
-    }
 
 
     public function test_it_can_add_a_reply()
@@ -44,6 +45,21 @@ class ThreadTest extends TestCase
 
 
         $this->assertCount(1, $this->thread->replies);
+    }
+
+
+    public function test_it_belongs_to_a_channel()
+    {
+        $thread = factory('App\Thread')->create();
+
+        $this->assertInstanceOf('App\Channel', $thread->channel);
+    }
+
+    public function test_it_can_make_a_string_path()
+    {
+        $thread = factory('App\Thread')->create();
+
+        $this->assertEquals('/threads/' . $thread->channel->slug . '/' . $thread->id, $thread->path());
     }
 
 }

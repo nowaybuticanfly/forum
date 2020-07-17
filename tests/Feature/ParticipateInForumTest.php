@@ -26,7 +26,6 @@ class ParticipateInForumTest extends TestCase
 
     public function test_an_authenticated_user_may_reply_to_a_thread()
     {
-        $this->withoutExceptionHandling();
 
         $user = $this->signIn();
 
@@ -35,9 +34,11 @@ class ParticipateInForumTest extends TestCase
         $reply = factory('App\Reply')->make();
 
 
-        $this->post('threads/'.$thread->id.'/replies', $reply->toArray());
+        $this->post($thread->path() . '/replies', $reply->toArray());
 
-        $this->get('threads/' . $thread->id)
+
+
+        $this->get($thread->path())
             ->assertSee($reply->body);
 
     }
