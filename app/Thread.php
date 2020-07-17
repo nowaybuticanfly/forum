@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-    public function author()
+
+    protected $guarded = [];
+
+
+    public function creator()
     {
         return $this->belongsTo('App\User', 'user_id');
     }
@@ -14,5 +18,11 @@ class Thread extends Model
     public function replies()
     {
         return $this->hasMany('App\Reply');
+    }
+
+
+    public function addReply($reply)
+    {
+        $this->replies()->create($reply);
     }
 }

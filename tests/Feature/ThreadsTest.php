@@ -1,14 +1,16 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-
 
 class ThreadsTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
+
+    protected $thread;
 
     public function setUp() : void
     {
@@ -44,6 +46,7 @@ class ThreadsTest extends TestCase
         $reply = factory('App\Reply')->create(['thread_id' => $this->thread->id]);
 
         $response = $this->get('/threads/' . $this->thread->id)
-        ->assertSee($reply->body);
+            ->assertSee($reply->body);
     }
+
 }
