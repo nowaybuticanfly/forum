@@ -47,7 +47,6 @@ class ThreadTest extends TestCase
         $this->assertCount(1, $this->thread->replies);
     }
 
-
     public function test_it_belongs_to_a_channel()
     {
         $thread = factory('App\Thread')->create();
@@ -61,5 +60,6 @@ class ThreadTest extends TestCase
 
         $this->assertEquals('/threads/' . $thread->channel->slug . '/' . $thread->id, $thread->path());
     }
+
 
 }

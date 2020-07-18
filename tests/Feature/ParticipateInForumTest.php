@@ -44,6 +44,20 @@ class ParticipateInForumTest extends TestCase
     }
 
 
+    public function test_a_reply_requires_body()
+    {
+        $user = $this->signIn();
+
+        $thread = factory('App\Thread')->create();
+
+        $reply = factory('App\Reply')->make(['body' => null]);
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertSessionHasErrors('body');
+
+    }
+
+
 
 
 }
