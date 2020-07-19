@@ -49,4 +49,17 @@ class ThreadsTest extends TestCase
             ->assertSee($reply->body);
     }
 
+
+    public function test_a_user_can_sort_threads_by_channel()
+    {
+        $channel = factory('App\Channel')->create();
+
+        $threadInChannel = factory('App\Thread')->create(['channel_id' => $channel->id]);
+        $threadNotInChannel = factory('App\Thread')->create();
+
+
+        $this->get('/threads/' . $channel->slug)
+            ->assertSee($threadInChannel->title)
+            ->assertDontSee($threadNotInChannel->title);
+    }
 }
