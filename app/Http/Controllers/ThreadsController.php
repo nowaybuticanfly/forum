@@ -3,30 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Channel;
+use App\Filters\ThreadFilters;
 use App\Thread;
+use App\User;
 use Illuminate\Http\Request;
 
 class ThreadsController extends Controller
 {
-    public function index(Channel $channel)
+    public function index(Channel $channel, ThreadFilters $filters)
     {
         if ($channel->exists)
         {
             $threads = $channel->threads()->latest()->get();
 
         } else {
-            $threads = Thread::latest()->get();
+
+            $threads = Thread::filter($filters)->get();
         }
 
 
         return view('threads.index', compact('threads'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $channels = Channel::latest()->get();

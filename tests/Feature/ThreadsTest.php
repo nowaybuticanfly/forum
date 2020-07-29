@@ -62,4 +62,18 @@ class ThreadsTest extends TestCase
             ->assertSee($threadInChannel->title)
             ->assertDontSee($threadNotInChannel->title);
     }
+
+    public function test_a_can_sort_threads_by_username()
+    {
+        $threadNotByJohn = factory('App\Thread')->create(['title' => 'notJohnDoe']);
+
+        $this->signIn(factory('App\User')->create(['name' => 'JohnDoe']));
+
+        $threadByJohn = factory('App\Thread')->create(['user_id' => auth()->id()]);
+
+
+        $this->get('threads?by=JohnDoe')
+            ->assertSee($threadByJohn->title)
+            ->assertDontSee($threadNotByJohn->title);
+    }
 }
