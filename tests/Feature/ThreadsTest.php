@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Thread;
 
 class ThreadsTest extends TestCase
 {
@@ -75,5 +76,40 @@ class ThreadsTest extends TestCase
         $this->get('threads?by=JohnDoe')
             ->assertSee($threadByJohn->title)
             ->assertDontSee($threadNotByJohn->title);
+    }
+
+    public function test_a_user_can_sort_threads_by_popularity()
+    {
+
+        //If we create threads with 0, 3 and 2 replies respectively.
+
+        $threadWithNoReplies = $this->thread;
+
+
+
+        $threadWithThreeReplies = factory('App\Thread')->create();
+
+        factory('App\Reply', 3)->create(['thread_id' => $threadWithThreeReplies->id]);
+
+
+
+
+        $threadWithTwoReplies = factory('App\Thread')->create();
+
+        factory('App\Reply', 2)->create(['thread_id' => $threadWithTwoReplies->id]);
+
+
+
+
+        //When we filter them by popularity
+
+        $response = $this->getJson('/threads?popular=1')->json();
+
+
+        //Then they should be return from most replies to least
+
+        $this->assertEquals([3,2,0], array_column($response, 'replies_count'));
+
+
     }
 }

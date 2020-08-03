@@ -1,9 +1,13 @@
-<div class="card-header">
-    <a href="/users/{{$reply->owner->id}}">{{$reply->owner->name}}</a>  said {{$reply->created_at->diffForHumans()}}...
-</div>
+<div class="card mt-3">
+    <h6 class="card-header">
+        <a href="#">
+            {{ $reply->owner->name }}
+        </a>
+        said {{ $reply->created_at->diffForHumans() }}...
+    </h6>
+    <div class="card-body">
 
-<div class="card-body">
-    {{$reply->body}}
-</div>
 
+        {{ $reply->body }}
+    </div>
 </div>
