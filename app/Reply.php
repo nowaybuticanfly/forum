@@ -3,10 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Favorite;
+
 
 class Reply extends Model
 {
+    use Favorable;
+
     protected $guarded = [];
+    protected $with = ['owner', 'favorites'];
 
     public function owner()
     {
@@ -17,4 +22,9 @@ class Reply extends Model
     {
         return $this->belongsTo('App\Thread');
     }
+
+
+
+
+
 }

@@ -29,7 +29,7 @@ Route::get('/threads/{channel}/{thread}', 'ThreadsController@show');
 Route::post('/threads/{channel}/{thread}/replies', 'RepliesController@store');
 Route::group(['middleware' => 'auth'], function() {
     Route::post('/threads', 'ThreadsController@store');
-
+    Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
 });
 
 
