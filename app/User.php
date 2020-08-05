@@ -19,6 +19,7 @@ class User extends Authenticatable
         'name', 'email', 'password',
     ];
 
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -37,9 +38,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
+
     public function threads()
     {
-        return $this->hasMany('App\Thread');
+        return $this->hasMany('App\Thread')->latest();
     }
 
     public function replies()

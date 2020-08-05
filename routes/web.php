@@ -32,5 +32,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
 });
 
+Route::get('/profiles/{user}', 'ProfilesController@show');
+
 
 
