@@ -33,12 +33,43 @@ class CreateThreadsTest extends TestCase
 
         $thread = factory('App\Thread')->make();
 
-
         $response = $this->post('/threads', $thread->toArray());
 
         $this->get($response->headers->get('Location'))
             ->assertSee($thread->body)
             ->assertSee($thread->title);
+    }
+
+
+    public function test_unauthorized_users_cannot_delete_threads()
+    {
+
+        $thread = factory('App\Thread')->create();
+
+        $this->delete($thread->path())
+            ->assertRedirect('/login');
+
+
+        $this->signIn();
+
+        $this->delete($thread->path())
+            ->assertStatus(403);
+
+    }
+
+
+    public function test_authorized_users_can_delete_a_thread()
+    {
+        $this->signIn();
+
+        $thread = factory('App\Thread')->create(['user_id' => auth()->id()]);
+        $reply = factory('App\Reply')->create(['thread_id' => $thread->id]);
+
+        $this->json('DELETE', $thread->path());
+
+        $this->assertDatabaseMissing('threads', ['id' => $thread->id])
+            ->assertDatabaseMissing('replies', ['id' => $reply->id]);
+
     }
 
 
