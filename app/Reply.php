@@ -8,6 +8,7 @@ use App\Favorite;
 
 class Reply extends Model
 {
+    use RecordsActivity;
     use Favorable;
 
     protected $guarded = [];
