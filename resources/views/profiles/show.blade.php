@@ -16,7 +16,9 @@
             </h3>
 
             @foreach($dailyActivities as $activity)
-                @include("profiles.activities.{$activity->type}")
+                @if(view()->exists("profiles.activities.{$activity->type}"))
+                    @include("profiles.activities.{$activity->type}")
+                @endif
             @endforeach
         @endforeach
 

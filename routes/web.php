@@ -21,18 +21,22 @@ Route::get('/', function () {
 
 
 
-
+//threads
 Route::get('/threads', 'ThreadsController@index');
 Route::get('/threads/create', 'ThreadsController@Create');
 Route::get('/threads/{channel}', 'ThreadsController@index');
 Route::get('/threads/{channel}/{thread}', 'ThreadsController@show');
 Route::post('/threads/{channel}/{thread}/replies', 'RepliesController@store');
-Route::group(['middleware' => 'auth'], function() {
-    Route::post('/threads', 'ThreadsController@store');
-    Route::delete('/threads/{channel}/{thread}', 'ThreadsController@destroy');
-    Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
-});
+Route::post('/threads', 'ThreadsController@store');
+Route::delete('/threads/{channel}/{thread}', 'ThreadsController@destroy');
 
+
+
+//replies
+Route::delete('/replies/{reply}','RepliesController@destroy');
+Route::patch('/replies/{reply}', 'RepliesController@update');
+Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
+//profiles
 Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
 
 

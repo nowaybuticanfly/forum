@@ -24,7 +24,10 @@ class Reply extends Model
         return $this->belongsTo('App\Thread');
     }
 
-
+    public function path()
+    {
+        return $this->thread->path() . "#reply-{$this->id}";
+    }
 
 
 

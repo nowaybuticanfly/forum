@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class ThreadsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
+
     public function index(Channel $channel, ThreadFilters $filters)
     {
         $threads = $this->getThreads($channel, $filters);
@@ -52,7 +57,7 @@ class ThreadsController extends Controller
             'user_id' => auth()->id()
         ]);
 
-        return redirect($thread->path());
+        return redirect($thread->path())->with('flash', 'You thread has been published');
     }
 
 

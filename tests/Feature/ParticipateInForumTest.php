@@ -57,7 +57,59 @@ class ParticipateInForumTest extends TestCase
 
     }
 
+    public function test_unauthorized_users_can_not_delete_a_reply()
+    {
+        $reply = factory('App\Reply')->create();
+
+        $this->delete('/replies/' . $reply->id)
+            ->assertRedirect('login');
+
+        $this->signIn();
+
+        $this->delete('/replies/' . $reply->id)
+            ->assertStatus(403);
+    }
+
+    public function test_authorized_user_can_delete_a_reply()
+    {
+        $this->signIn();
+
+        $reply = factory('App\Reply')->create(['user_id' => auth()->id()]);
+
+        $this->delete('/replies/' . $reply->id)
+            ->assertStatus(302);
+
+        $this->assertDatabaseMissing('replies',[
+            'id' => $reply->id,
+        ]);
+
+    }
 
 
+    public function test_unauthorize_users_can_not_update_replies()
+    {
+        $reply = factory('App\Reply')->create();
+        $updatedReply = 'Reply has been changed';
+
+        $this->patch('/replies/' . $reply->id, ['body' => $updatedReply])
+            ->assertRedirect('login');
+
+        $this->signIn();
+
+        $this->patch('/replies/' . $reply->id, ['body' => $updatedReply])
+            ->assertStatus(403);
+    }
+
+    public function test_authorized_users_can_update_replies()
+    {
+        $this->signIn();
+        $reply = factory('App\Reply')->create(['user_id' => auth()->id()]);
+
+        $updatedReply = 'Reply has been changed';
+
+        $this->patch('/replies/' . $reply->id, ['body' => $updatedReply]);
+
+        $this->assertDatabaseHas('replies', ['id' => $reply->id, 'body' => $updatedReply]);
+    }
 
 }
