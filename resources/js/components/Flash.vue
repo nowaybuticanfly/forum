@@ -5,43 +5,38 @@
 </template>
 
 <script>
-    export default {
-        props: ['message'],
+window.events = new Vue();
+window.flash = function (message) {
+    window.events.$emit( 'flash', {message} );
+};
+export default {
+    props: ['message'],
 
-        data() {
+    data () {
+        return {body: this.message, show: false}
+    },
 
-            return {
-                body: '',
-                show:   false
-            }
-        },
-
-        created() {
-            if (this.message) {
-                this.flash(this.message);
-            }
-
-            window.events.$on('flash', message => {
-                this.flash(message);
-            })
-        },
-
-        methods: {
-            flash(message) {
-                this.body = this.message;
-                this.show = true
-                this.hide();
-            },
-
-            hide() {
-                setTimeout(() => {
-                    this.show = false;
-                }, 3000);
-            }
+    created () {
+        if (this.message) {
+            this.flash();
         }
+        window.events.$on( 'flash', data => this.flash( data ) );
+    },
 
-
+    methods: {
+        flash (data) {
+            if (data) {
+                this.body = data.message;
+            }
+            this.show = true;
+            this.hide();
+        }, hide () {
+            setTimeout( () => {
+                this.show = false;
+            }, 3000 );
+        }
     }
+};
 </script>
 
 
