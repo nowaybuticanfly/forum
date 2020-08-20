@@ -10,7 +10,7 @@
             </h1>
         </div>
 
-        @foreach($activities as $date => $dailyActivities)
+        @forelse($activities as $date => $dailyActivities)
             <h3 class="page-header">
                 {{ $date }}
             </h3>
@@ -20,7 +20,9 @@
                     @include("profiles.activities.{$activity->type}")
                 @endif
             @endforeach
-        @endforeach
+        @empty
+            <p>There is no activity for this user yet.</p>
+        @endforelse
 
     </div>
 

@@ -9,9 +9,9 @@
                 said {{ $reply->created_at->diffForHumans() }}...
 
                 </h5>
-
-                <favorite :reply="{{$reply}}"></favorite>
-
+                @if(auth()->check())
+                    <favorite :reply="{{$reply}}"></favorite>
+                @endif
             </div>
         </h6>
 
