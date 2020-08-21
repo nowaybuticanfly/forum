@@ -31,15 +31,13 @@ class ParticipateInForumTest extends TestCase
 
         $thread = factory('App\Thread')->create();
 
-        $reply = factory('App\Reply')->make();
+        $reply = factory('App\Reply')->make()->toArray();
 
 
-        $this->post($thread->path() . '/replies', $reply->toArray());
+        $this->post($thread->path() . '/replies', $reply);
 
 
-
-        $this->get($thread->path())
-            ->assertSee($reply->body);
+        $this->assertDatabaseHas('replies', ['body' => $reply['body'], 'thread_id' => $thread->id]);
 
     }
 
@@ -86,7 +84,7 @@ class ParticipateInForumTest extends TestCase
     }
 
 
-    public function test_unauthorize_users_can_not_update_replies()
+    public function test_unauthorized_users_can_not_update_replies()
     {
         $reply = factory('App\Reply')->create();
         $updatedReply = 'Reply has been changed';

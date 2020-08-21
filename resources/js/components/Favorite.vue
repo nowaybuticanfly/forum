@@ -19,7 +19,7 @@ export default {
 
     data() {
         return {
-            count: this.reply.favorites_count,
+            count: this.reply.favorites_count ? this.reply.favorites_count : 0,
             active: this.reply.isFavorited
         }
     },

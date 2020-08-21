@@ -25,6 +25,7 @@ Vue.prototype.authorize = function (handler) {
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('flash', require('./components/Flash').default);
+Vue.component('paginator', require('./components/Paginator').default);
 Vue.component('thread-view', require('./pages/Thread').default);
 
 /**

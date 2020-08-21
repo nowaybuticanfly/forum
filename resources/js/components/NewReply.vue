@@ -28,7 +28,7 @@ export default {
     data() {
         return {
             body: '',
-            endpoint: window.location + '/replies',
+            endpoint: location.pathname + '/replies',
         };
     },
     computed: {
