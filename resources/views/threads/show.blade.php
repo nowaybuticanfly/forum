@@ -30,6 +30,8 @@
 
                     <replies @removed="repliesCount--"
                              @added="repliesCount++"></replies>
+
+
                 </div>
 
                 <div class="col-md-4">
@@ -40,6 +42,8 @@
                                 <a href="/profiles/{{$thread->creator->name}}">{{ $thread->creator->name }}</a>, and currently
                                 has <span v-text="repliesCount"></span> {{ Str::plural('comment', $thread->replies_count) }}.
                             </p>
+                            <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}"></subscribe-button>
+
                         </div>
                     </div>
                 </div>

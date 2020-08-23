@@ -28,6 +28,8 @@ Vue.component('flash', require('./components/Flash').default);
 Vue.component('paginator', require('./components/Paginator').default);
 Vue.component('thread-view', require('./pages/Thread').default);
 
+Vue.component('user-notifications', require('./components/UserNotifications').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
