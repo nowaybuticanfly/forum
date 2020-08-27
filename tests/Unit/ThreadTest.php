@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use App\Notifications\ThreadWasUpdated;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -46,6 +48,22 @@ class ThreadTest extends TestCase
 
         $this->assertCount(1, $this->thread->replies);
     }
+
+    public function test_it_notifies_alL_the_subscribers_when_reply_is_added()
+    {
+        Notification::fake();
+        $this->signIn()
+            ->thread->subscribe()
+            ->addReply([
+            'body' => 'Foobar',
+            'user_id' => 1
+        ]);
+
+
+        Notification::assertSentTo(auth()->user(), ThreadWasUpdated::class);
+
+    }
+
 
     public function test_it_belongs_to_a_channel()
     {
@@ -107,6 +125,22 @@ class ThreadTest extends TestCase
 
     }
 
+
+    public function test_a_thread_can_check_if_the_authenticated_user_has_read_all_the_replies()
+    {
+        $this->signIn();
+
+        $thread = factory('App\Thread')->create();
+
+
+        tap(auth()->user(), function($user) use ($thread) {
+
+            $user->read($thread);
+
+            $this->assertFalse($thread->hasUpdatesFor($user));
+        });
+
+    }
 
 
 }
