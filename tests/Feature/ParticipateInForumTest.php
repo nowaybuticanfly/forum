@@ -51,7 +51,7 @@ class ParticipateInForumTest extends TestCase
         $reply = factory('App\Reply')->make(['body' => null]);
 
         $this->post($thread->path() . '/replies', $reply->toArray())
-            ->assertStatus(422);
+            ->assertStatus(302);
 
     }
 
@@ -112,7 +112,6 @@ class ParticipateInForumTest extends TestCase
 
     public function test_replies_that_contain_spam_may_not_be_created()
     {
-        $this->withoutExceptionHandling();
 
         $this->signIn();
 
@@ -123,14 +122,13 @@ class ParticipateInForumTest extends TestCase
         ])->toArray();
 
 
-        $this->post($thread->path() . '/replies', $reply)
+        $this->json('post',$thread->path() . '/replies', $reply)
             ->assertStatus(422);
     }
 
 
     public function test_users_may_only_reply_to_threads_only_once_per_minute()
     {
-        $this->withoutExceptionHandling();
 
         $this->signIn();
 
@@ -142,11 +140,11 @@ class ParticipateInForumTest extends TestCase
 
         //Add one reply
 
-        $this->post($thread->path() . '/replies', $reply->toArray())
+        $this->json('post', $thread->path() . '/replies', $reply->toArray())
             ->assertStatus(201);
 
         //And then immediately try to add another one, which u shouldn't be able to do
-        $this->post($thread->path() . '/replies', $reply->toArray())
+        $this->json('post', $thread->path() . '/replies', $reply->toArray())
             ->assertStatus(429);
 
     }

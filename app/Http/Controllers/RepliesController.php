@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Channel;
+use App\Http\Requests\CreateReplyRequest;
 use App\Reply;
 use App\Rules\SpamFree;
 use App\Thread;
@@ -22,26 +23,12 @@ class RepliesController extends Controller
         return $thread->replies()->paginate(10);
     }
 
-    public function store($channelId, Thread $thread)
+    public function store($channelId, Thread $thread, CreateReplyRequest $request)
     {
-        try {
-            if (Gate::denies('create', new Reply)) {
-                return response('You cant reply more than once per minute', 429);
-            }
-
-            \request()->validate([
-                'body' => ['required', new SpamFree]
-            ]);
-
-            $reply = $thread->addReply([
-                'body' => request('body'),
-                'user_id' => auth()->id()
-            ]);
-        } catch (\Exception $e) {
-            return response('Sorry your reply is invalid', 422);
-        }
-
-        return $reply->load('owner');
+        return $thread->addReply([
+            'body' => request('body'),
+            'user_id' => auth()->id()
+        ])->load('owner');
     }
 
     public function destroy(Reply $reply)
