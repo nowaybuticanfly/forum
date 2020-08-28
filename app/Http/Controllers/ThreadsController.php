@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Channel;
 use App\Filters\ThreadFilters;
 use App\Inspections\Spam;
+use App\Rules\SpamFree;
 use App\Thread;
 use App\User;
 use Carbon\Carbon;
@@ -45,8 +46,8 @@ class ThreadsController extends Controller
     public function store(Request $request, Spam $spam)
     {
         $this->validate($request, [
-           'title' => 'required',
-            'body' => 'required',
+           'title' => ['required', new SpamFree],
+            'body' => ['required', new SpamFree],
             'channel_id' => 'required|exists:channels,id'
         ]);
 

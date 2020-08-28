@@ -51,7 +51,7 @@ class ParticipateInForumTest extends TestCase
         $reply = factory('App\Reply')->make(['body' => null]);
 
         $this->post($thread->path() . '/replies', $reply->toArray())
-            ->assertSessionHasErrors('body');
+            ->assertStatus(422);
 
     }
 
@@ -122,9 +122,9 @@ class ParticipateInForumTest extends TestCase
             'body' => 'Yahoo Customer Support'
         ])->toArray();
 
-        $this->expectException(\Exception::class);
 
-        $this->post($thread->path() . '/replies', $reply);
+        $this->post($thread->path() . '/replies', $reply)
+            ->assertStatus(422);
     }
 
 }

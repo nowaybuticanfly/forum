@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Channel;
 use App\Reply;
-use App\Inspections\Spam;
+use App\Rules\SpamFree;
 use App\Thread;
 use Illuminate\Http\Request;
 use mysql_xdevapi\Exception;
@@ -21,10 +21,12 @@ class RepliesController extends Controller
         return $thread->replies()->paginate(10);
     }
 
-    public function store($channelId, Thread $thread, Spam  $spam)
+    public function store($channelId, Thread $thread)
     {
         try {
-            $this->validateReply();
+            \request()->validate([
+                'body' => ['required', new SpamFree]
+            ]);
 
             $reply = $thread->addReply([
                 'body' => request('body'),
@@ -55,7 +57,11 @@ class RepliesController extends Controller
         $this->authorize('update', $reply);
 
         try {
-            $this->validateReply();
+
+            \request()->validate([
+                'body' => ['required', new SpamFree]
+            ]);
+
             $reply->update(['body' => request('body')]);
 
         } catch (\Exception $e) {
@@ -63,12 +69,4 @@ class RepliesController extends Controller
         }
     }
 
-    protected function validateReply()
-    {
-        $this->validate(request(), [
-            'body' => 'required'
-        ]);
-
-        resolve(Spam::class)->detect(request('body'));
-    }
 }
