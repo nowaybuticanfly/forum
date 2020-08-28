@@ -36,7 +36,10 @@ Vue.component('user-notifications', require('./components/UserNotifications').de
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-
+window.events = new Vue();
+window.flash = function (message, level) {
+    window.events.$emit( 'flash', {message, level} );
+};
 const app = new Vue({
     el: '#app',
 });

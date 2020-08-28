@@ -7,6 +7,7 @@ use App\Reply;
 use App\Inspections\Spam;
 use App\Thread;
 use Illuminate\Http\Request;
+use mysql_xdevapi\Exception;
 
 class RepliesController extends Controller
 {
@@ -22,15 +23,18 @@ class RepliesController extends Controller
 
     public function store($channelId, Thread $thread, Spam  $spam)
     {
-        $this->validateReply();
+        try {
+            $this->validateReply();
 
-        $reply = $thread->addReply([
-            'body' => request('body'),
-            'user_id' => auth()->id()
-        ]);
-        if(\request()->expectsJson()) return $reply->load('owner');
+            $reply = $thread->addReply([
+                'body' => request('body'),
+                'user_id' => auth()->id()
+            ]);
+        } catch (\Exception $e) {
+            return response('Sorry your reply is invalid', 422);
+        }
 
-        return redirect($thread->path())->with('flash', 'Your reply has been left');
+        return $reply->load('owner');
     }
 
     public function destroy(Reply $reply)
@@ -50,12 +54,13 @@ class RepliesController extends Controller
     {
         $this->authorize('update', $reply);
 
-        $this->validateReply();
+        try {
+            $this->validateReply();
+            $reply->update(['body' => request('body')]);
 
-        $reply->body = request('body');
-
-
-        $reply->save();
+        } catch (\Exception $e) {
+            return response('Sorry your reply is invalid', 422);
+        }
     }
 
     protected function validateReply()
