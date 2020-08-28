@@ -127,4 +127,28 @@ class ParticipateInForumTest extends TestCase
             ->assertStatus(422);
     }
 
+
+    public function test_users_may_only_reply_to_threads_only_once_per_minute()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->signIn();
+
+        $thread = factory('App\Thread')->create();
+
+        $reply = factory('App\Reply')->make([
+            'body' => 'Simple reply'
+        ]);
+
+        //Add one reply
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(201);
+
+        //And then immediately try to add another one, which u shouldn't be able to do
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(429);
+
+    }
+
 }

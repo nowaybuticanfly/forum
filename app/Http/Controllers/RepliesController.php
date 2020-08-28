@@ -8,6 +8,7 @@ use App\Rules\SpamFree;
 use App\Thread;
 use Illuminate\Http\Request;
 use mysql_xdevapi\Exception;
+use Illuminate\Support\Facades\Gate;
 
 class RepliesController extends Controller
 {
@@ -24,6 +25,10 @@ class RepliesController extends Controller
     public function store($channelId, Thread $thread)
     {
         try {
+            if (Gate::denies('create', new Reply)) {
+                return response('You cant reply more than once per minute', 429);
+            }
+
             \request()->validate([
                 'body' => ['required', new SpamFree]
             ]);
@@ -57,7 +62,6 @@ class RepliesController extends Controller
         $this->authorize('update', $reply);
 
         try {
-
             \request()->validate([
                 'body' => ['required', new SpamFree]
             ]);
