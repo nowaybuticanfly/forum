@@ -51,7 +51,7 @@ class ParticipateInForumTest extends TestCase
         $reply = factory('App\Reply')->make(['body' => null]);
 
         $this->post($thread->path() . '/replies', $reply->toArray())
-            ->assertStatus(302);
+            ->assertStatus(302  );
 
     }
 

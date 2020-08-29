@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Channel;
 use App\Http\Requests\CreateReplyRequest;
+use App\Notifications\YouWereMentioned;
 use App\Reply;
 use App\Rules\SpamFree;
 use App\Thread;
+use App\User;
 use Illuminate\Http\Request;
 use mysql_xdevapi\Exception;
 use Illuminate\Support\Facades\Gate;
@@ -25,10 +27,13 @@ class RepliesController extends Controller
 
     public function store($channelId, Thread $thread, CreateReplyRequest $request)
     {
-        return $thread->addReply([
+        $reply = $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id()
-        ])->load('owner');
+        ]);
+
+
+        return $reply->load('owner');
     }
 
     public function destroy(Reply $reply)

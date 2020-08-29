@@ -34,5 +34,24 @@ class ReplyTest extends TestCase
     }
 
 
+    public function test_it_can_detect_all_mentioned_users_in_its_body()
+    {
+        $john = factory('App\User')->create([
+            'name' => 'JohnDoe'
+        ]);
+
+        $alice = factory('App\User')->create([
+            'name' => 'AliceDoe'
+        ]);
+
+        $reply = factory('App\Reply')->create([
+            'body' => '@JohnDoe and  @AliceDoe look here'
+        ]);
+
+        $this->assertEquals(['JohnDoe', 'AliceDoe'], $reply->mentionedUsers());
+
+
+    }
+
 
 }
