@@ -36,22 +36,23 @@ class ReplyTest extends TestCase
 
     public function test_it_can_detect_all_mentioned_users_in_its_body()
     {
-        $john = factory('App\User')->create([
-            'name' => 'JohnDoe'
-        ]);
-
-        $alice = factory('App\User')->create([
-            'name' => 'AliceDoe'
-        ]);
-
-        $reply = factory('App\Reply')->create([
+        $reply = new \App\Reply([
             'body' => '@JohnDoe and  @AliceDoe look here'
         ]);
 
         $this->assertEquals(['JohnDoe', 'AliceDoe'], $reply->mentionedUsers());
-
-
     }
 
 
+    public function test_it_wraps_mentioned_usernames_in_the_body_within_anchor_tags()
+    {
+        $this->withoutExceptionHandling();
+
+        $reply = new \App\Reply([
+            'body' => '@JohnDoe look here'
+        ]);
+
+        $this->assertEquals('<a href="/profiles/JohnDoe">@JohnDoe</a> look here', $reply->body);
+
+    }
 }
