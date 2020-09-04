@@ -27,13 +27,14 @@
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
     <style>
         body { padding-bottom: 100px; }
         .level { display: flex; align-items: center; }
         .flex { flex:1; }
         [v-cloak] { display: none; }
     </style>
+
+    @yield('header')
 </head>
 <body>
     <div id="app">

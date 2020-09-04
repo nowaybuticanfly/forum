@@ -31,11 +31,25 @@ class MentionUsersTest extends TestCase
         $this->json('post', $thread->path() . '/replies', $reply->toArray());
 
         $this->assertCount(1, $jane->notifications);
+    }
+
+    public function test_it_can_fetch_all_mentioned_users_starting_with_the_given_characters()
+    {
+        factory('App\User')->create([
+            'name'=>'JohnDoe'
+        ]);
+
+        factory('App\User')->create([
+            'name'=>'JohnDoe2'
+        ]);
+        factory('App\User')->create([
+            'name'=>'JaneDoe'
+        ]);
 
 
+        $results = $this->json('GET', 'api/users', ['name' => 'john']);
 
-
-
+        $this->assertCount(2, $results->json());
     }
 
 }

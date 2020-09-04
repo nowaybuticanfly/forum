@@ -8,8 +8,10 @@
                           placeholder="Have something to say?"
                           rows="5"
                           required
-                          v-model="body"></textarea>
+                          v-model="body"
+                ></textarea>
             </div>
+
 
             <button type="submit"
                     class="btn btn-outline-secondary"
@@ -24,12 +26,39 @@
 </template>
 
 <script>
+import Tribute from "tributejs";
+
 export default {
+
+    components: {
+        Tribute
+    },
+
     data() {
         return {
             body: '',
             endpoint: location.pathname + '/replies',
         };
+    },
+    mounted() {
+        let tribute = new Tribute({
+            noMatchTemplate: function () {
+                return '<span style:"visibility: hidden;"></span>';
+            },
+            // column to search against in the object (accepts function or string)
+            lookup: 'value',
+            // column that contains the content to insert by default
+            fillAttr: 'value',
+            menuShowMinLength: 2,
+            values: function(query, cb) {
+                axios.get('/api/users', {params: {name: query}} )
+                    .then(function(response){
+                        console.log(response);
+                        cb(response.data);
+                    });
+            },
+        });
+        tribute.attach(document.querySelectorAll("#body"));
     },
     computed: {
         signedIn() {
