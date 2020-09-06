@@ -25,6 +25,7 @@
                                 @endcan
                             </div>
                         </h5>
+
                         <div class="card-body">
 
                             {{ $thread->body }}
