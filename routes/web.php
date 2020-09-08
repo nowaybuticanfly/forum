@@ -48,6 +48,6 @@ Route::delete('/profiles/{user}/notifications/{notifications}', 'UserNotificatio
 //api
 
 Route::get('/api/users', 'Api\UsersController@index');
-
+Route::post('/api/users/{user}/avatar', 'Api\UserAvatarController@store');
 
 
