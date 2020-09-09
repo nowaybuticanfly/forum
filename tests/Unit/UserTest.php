@@ -26,6 +26,19 @@ class UserTest extends TestCase
 
     }
 
+    function test_it_can_determine_its_avatar_path()
+    {
+        $user = factory('App\User')->create();
+
+        $this->assertEquals(asset('/storage/avatars/default.jpeg'), $user->avatar());
+
+
+        $user->avatar_path = 'avatars/avatar.jpeg';
+
+        $this->assertEquals(asset('/storage/avatars/avatar.jpeg'), $user->avatar());
+
+    }
+
 
 
 

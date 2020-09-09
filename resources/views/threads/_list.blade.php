@@ -4,6 +4,7 @@
             <div class="level">
                 <div class="flex">
                     <h4 class="flex">
+                        <img src="{{ $thread->creator->avatar() }}" alt="avatar" width="25" height="25" class="mr-1">
                         <a href="/profiles/{{$thread->creator->name}}">{{ $thread->creator->name }}</a> posted:
                         <a href="{{$thread->path()}}">
                             @if (auth()->check() && $thread->hasUpdatesFor(auth()->user()))

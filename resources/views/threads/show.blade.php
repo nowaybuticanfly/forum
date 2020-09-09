@@ -12,6 +12,7 @@
                     <div class="card">
                         <h5 class="card-header">
                             <div class="level">
+                                <img src="{{ $thread->creator->avatar()}}" alt="avatar" height="50" width="50">
                                 <span class="flex">
                                 <a href="/profiles/{{$thread->creator->name}}">{{ $thread->creator->name }}</a> posted:
                                 {{ $thread->title }}
