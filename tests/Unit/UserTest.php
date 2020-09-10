@@ -30,12 +30,12 @@ class UserTest extends TestCase
     {
         $user = factory('App\User')->create();
 
-        $this->assertEquals(asset('/storage/avatars/default.jpeg'), $user->avatar());
+        $this->assertEquals(asset('/storage/avatars/default.jpeg'), $user->avatar_path);
 
 
         $user->avatar_path = 'avatars/avatar.jpeg';
 
-        $this->assertEquals(asset('/storage/avatars/avatar.jpeg'), $user->avatar());
+        $this->assertEquals(asset('/storage/avatars/avatar.jpeg'), $user->avatar_path);
 
     }
 
