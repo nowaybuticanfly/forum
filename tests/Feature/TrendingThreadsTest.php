@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Trending;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Redis;
@@ -12,28 +13,29 @@ class TrendingThreadsTest extends TestCase
     use RefreshDatabase;
 
 
+    private $trending;
+
     public function setUp() : void
     {
         parent::setUp();
 
-        Redis::del('trending_threads');
+        $this->trending = new Trending();
+
+        $this->trending->reset();
     }
 
 
     public function test_it_increments_a_thread_score_each_time_thread_is_read()
     {
-        $this->assertEmpty(Redis::zrevrange('trending_threads', 0, -1));
+        $this->assertEmpty($this->trending->get());
 
         $thread = factory('App\Thread')->create();
 
 
-
-
         $this->call('GET', $thread->path());
 
-        $trending = Redis::zrevrange('trending_threads', 0, -1);
 
-        $this->assertCount(1, $trending);
+        $this->assertCount(1, $this->trending->get());
     }
 
 
