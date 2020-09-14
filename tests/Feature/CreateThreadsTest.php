@@ -25,6 +25,12 @@ class CreateThreadsTest extends TestCase
 
     }
 
+    public function test_an_authenticated_user_must_first_confirm_their_email_address_before_creating_threads()
+    {
+        $this->publishThread()
+            ->assertRedirect('/threads')
+            ->assertSessionHas('flash');
+    }
 
     public function test_an_authenticated_user_can_create_a_thread()
     {
@@ -81,16 +87,6 @@ class CreateThreadsTest extends TestCase
         ]);
     }
 
-
-    public function publishThread($overrides=[])
-    {
-        $this->signIn();
-
-        $thread = factory('App\Thread')->make($overrides);
-
-        return $this->post('/threads', $thread->toArray());
-    }
-
     public function test_a_thread_requires_a_title()
     {
         $this->publishThread(['title' => null])
@@ -114,6 +110,18 @@ class CreateThreadsTest extends TestCase
 
         $this->publishThread(['channel_id' => 9999])
             ->assertSessionHasErrors('channel_id');
+    }
+
+
+
+
+    public function publishThread($overrides=[])
+    {
+        $this->signIn();
+
+        $thread = factory('App\Thread')->make($overrides);
+
+        return $this->post('/threads', $thread->toArray());
     }
 
 }
